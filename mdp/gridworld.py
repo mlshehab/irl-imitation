@@ -109,7 +109,7 @@ class GridWorld(object):
     else:
       return 0
 
-  def _reward(self, state):
+  def get_reward(self, state):
     """
     returns
       the reward on current state
@@ -149,8 +149,10 @@ class GridWorld(object):
       for a in range(self.n_actions):
         inc = self.neighbors[a]
         nei_s = (state[0] + inc[0], state[1] + inc[1])
+        # print("1st is: ", nei_s[0])
+        # print("2nd is: ", nei_s[1])
         if nei_s[0] < 0 or nei_s[0] >= self.height or \
-           nei_s[1] < 0 or nei_s[1] >= self.width or self.grid[nei_s[0]][nei_s[1]] == 'x':
+           nei_s[1] < 0 or nei_s[1] >= self.width or self.grid[int(nei_s[0])][int(nei_s[1])] == 'x':
           # if the move is invalid, accumulates the prob to the current state
           mov_probs[self.n_actions-1] += mov_probs[a]
           mov_probs[a] = 0
@@ -316,13 +318,16 @@ class GridWorld(object):
     P_a = np.zeros((N_STATES, N_STATES, N_ACTIONS))
     for si in range(N_STATES):
       posi = self.idx2pos(si)
+      print("posi is: ", posi)
       for a in range(N_ACTIONS):
         probs = self.get_transition_states_and_probs(posi, a)
 
         for posj, prob in probs:
           sj = self.pos2idx(posj)
           # Prob of si to sj given action a
-          P_a[si, sj, a] = prob
+          print(posj)
+          print(sj)
+          P_a[int(si), int(sj), int(a)] = prob
     return P_a
 
   def get_values_mat(self, values):
@@ -364,4 +369,4 @@ class GridWorld(object):
     returns:
       2d column-major position
     """
-    return (idx % self.height, idx / self.height)
+    return (idx % self.height, int(idx / self.height))

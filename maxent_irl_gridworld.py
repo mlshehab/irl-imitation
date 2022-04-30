@@ -102,6 +102,7 @@ def generate_demonstrations(gw, policy, n_trajs=100, len_traj=20, rand_start=Fal
 
 
 def main():
+  # print(int(3.5))
   N_STATES = H * W
   N_ACTIONS = 5
 
